@@ -5,7 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import CreateCustomer from "./pages/CreateCustomer";
 import CreateOpportunity from "./pages/CreateOpportunity";
 import CreateUser from "./pages/CreateUser";
-import ListCustomers from "./pages/ListCustomers"; // nova página de listagem
+import ListCustomers from "./pages/ListCustomers";
+import ListOpportunities from "./pages/ListOpportunities"; // nova página
+import ListUsers from "./pages/ListUsers"; // nova página
 import { setAuthToken } from "./services/api";
 
 function App() {
@@ -19,36 +21,42 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Login */}
         <Route path="/login" element={<Login onLogin={setToken} />} />
 
+        {/* Dashboard principal */}
         <Route
           path="/"
           element={token ? <Dashboard /> : <Navigate to="/login" replace />}
         />
 
+        {/* Criação de entidades */}
         <Route
           path="/create-customer"
           element={token ? <CreateCustomer /> : <Navigate to="/login" replace />}
         />
-
         <Route
           path="/create-opportunity"
           element={token ? <CreateOpportunity /> : <Navigate to="/login" replace />}
         />
-
         <Route
           path="/create-user"
           element={token ? <CreateUser /> : <Navigate to="/login" replace />}
         />
 
+        {/* Listagens */}
         <Route
           path="/clientes"
           element={token ? <ListCustomers /> : <Navigate to="/login" replace />}
         />
-
-        {/* Futuras rotas para listagens de oportunidades e usuários */}
-        {/* <Route path="/oportunidades" element={token ? <ListOpportunities /> : <Navigate to="/login" replace />} /> */}
-        {/* <Route path="/usuarios" element={token ? <ListUsers /> : <Navigate to="/login" replace />} /> */}
+        <Route
+          path="/oportunidades"
+          element={token ? <ListOpportunities /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/usuarios"
+          element={token ? <ListUsers /> : <Navigate to="/login" replace />}
+        />
       </Routes>
     </Router>
   );
