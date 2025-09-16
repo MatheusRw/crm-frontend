@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CreateCustomer from "./pages/CreateCustomer";
+import EditCustomer from "./pages/EditCustomer";
 import CreateOpportunity from "./pages/CreateOpportunity";
+import ListOpportunities from "./pages/ListOpportunities";
 import CreateUser from "./pages/CreateUser";
+import EditUser from "./pages/EditUser";
 import ListCustomers from "./pages/ListCustomers";
-import ListOpportunities from "./pages/ListOpportunities"; // nova página
-import ListUsers from "./pages/ListUsers"; // nova página
+import ListUsers from "./pages/ListUsers";
 import { setAuthToken } from "./services/api";
 
 function App() {
@@ -42,6 +44,16 @@ function App() {
         <Route
           path="/create-user"
           element={token ? <CreateUser /> : <Navigate to="/login" replace />}
+        />
+
+        {/* Edição de entidades */}
+        <Route
+          path="/edit-customer/:id"
+          element={token ? <EditCustomer /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/edit-user/:id"
+          element={token ? <EditUser /> : <Navigate to="/login" replace />}
         />
 
         {/* Listagens */}
