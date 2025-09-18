@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateCustomer from "./pages/CreateCustomer";
 import EditCustomer from "./pages/EditCustomer";
 import CreateOpportunity from "./pages/CreateOpportunity";
+import EditOpportunity from "./pages/EditOpportunity"; // Importe o componente de edição
 import ListOpportunities from "./pages/ListOpportunities";
 import CreateUser from "./pages/CreateUser";
 import EditUser from "./pages/EditUser";
@@ -50,6 +51,10 @@ function App() {
         <Route
           path="/edit-customer/:id"
           element={token ? <EditCustomer /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/edit-opportunity/:id" // Rota para editar oportunidades
+          element={token ? <EditOpportunity /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/edit-user/:id"

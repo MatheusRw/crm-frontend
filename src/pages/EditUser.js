@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { TextField, Button, Paper, Typography, Stack } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  Stack,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { api } from "../services/api";
 
 function EditUser() {
@@ -11,8 +19,17 @@ function EditUser() {
     name: "",
     email: "",
     password: "",
-    role: "" // exemplo de campo adicional, como perfil do usuário
+    role: "" // campo extra: perfil do usuário
   });
+
+  // Estado da notificação
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // success | error
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   // Carregar dados do usuário ao montar o componente
   useEffect(() => {
@@ -22,6 +39,9 @@ function EditUser() {
         setUser(response.data);
       } catch (error) {
         console.error("Erro ao carregar usuário:", error);
+        setSnackbarMessage("Erro ao carregar usuário ❌");
+        setSnackbarSeverity("error");
+        setOpenSnackbar(true);
       }
     };
 
@@ -39,9 +59,18 @@ function EditUser() {
     e.preventDefault();
     try {
       await api.put(`/users/${id}`, user);
-      navigate("/list-users"); // redireciona para lista de usuários
+
+      setSnackbarMessage("Usuário atualizado com sucesso! ✅");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+
+      // Navega para listagem após um pequeno delay
+      setTimeout(() => navigate("/usuarios"), 1500);
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
+      setSnackbarMessage("Erro ao atualizar usuário ❌");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
     }
   };
 
@@ -89,6 +118,23 @@ function EditUser() {
           </Button>
         </Stack>
       </form>
+
+      {/* Snackbar de feedback */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 }

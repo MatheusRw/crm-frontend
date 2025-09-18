@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { TextField, Button, Paper, Typography, Stack } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Paper,
+  Typography,
+  Stack,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { api } from "../services/api";
 
 function EditCustomer() {
@@ -10,8 +18,17 @@ function EditCustomer() {
   const [customer, setCustomer] = useState({
     name: "",
     email: "",
-    phone: ""
+    phone: "",
   });
+
+  // Estados da notificação
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // success | error
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   // Carregar dados do cliente
   useEffect(() => {
@@ -21,6 +38,9 @@ function EditCustomer() {
         setCustomer(response.data);
       } catch (error) {
         console.error("Erro ao carregar cliente:", error);
+        setSnackbarMessage("Erro ao carregar cliente ❌");
+        setSnackbarSeverity("error");
+        setOpenSnackbar(true);
       }
     };
     fetchCustomer();
@@ -37,9 +57,17 @@ function EditCustomer() {
     e.preventDefault();
     try {
       await api.put(`/customers/${id}`, customer);
-      navigate("/list-customers");
+      setSnackbarMessage("Cliente atualizado com sucesso! ✅");
+      setSnackbarSeverity("success");
+      setOpenSnackbar(true);
+
+      // Navegar para listagem após um pequeno delay
+      setTimeout(() => navigate("/clientes"), 1500);
     } catch (error) {
       console.error("Erro ao atualizar cliente:", error);
+      setSnackbarMessage("Erro ao atualizar cliente ❌");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
     }
   };
 
@@ -79,6 +107,23 @@ function EditCustomer() {
           </Button>
         </Stack>
       </form>
+
+      {/* Snackbar de feedback */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 }
