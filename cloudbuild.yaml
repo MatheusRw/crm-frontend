@@ -1,30 +1,30 @@
 steps:
-  # Build da imagem Docker
+  # Build do frontend
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/crm-frontend', '.']
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'REACT_APP_API_URL=https://crm-matheus-828317128646.southamerica-east1.run.app'
+      - '-t'
+      - 'southamerica-east1-docker.pkg.dev/crm-matheus/crm-repo/crm-frontend:latest'
+      - '.'
   
-  # Push para Container Registry
+  # Push da imagem
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/crm-frontend']
+    args:
+      - 'push'
+      - 'southamerica-east1-docker.pkg.dev/crm-matheus/crm-repo/crm-frontend:latest'
   
   # Deploy no Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
-    - 'run'
-    - 'deploy'
-    - 'crm-frontend'
-    - '--image'
-    - 'gcr.io/$PROJECT_ID/crm-frontend'
-    - '--region'
-    - 'southamerica-east1'
-    - '--platform'
-    - 'managed'
-    - '--allow-unauthenticated'
-    - '--set-env-vars'
-    - 'REACT_APP_API_URL=https://crm-backend-828317128646.southamerica-east1.run.app'
-
-images:
-  - 'gcr.io/$PROJECT_ID/crm-frontend'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+      - 'run'
+      - 'deploy'
+      - 'crm-frontend'
+      - '--image'
+      - 'southamerica-east1-docker.pkg.dev/crm-matheus/crm-repo/crm-frontend:latest'
+      - '--region'
+      - 'southamerica-east1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
