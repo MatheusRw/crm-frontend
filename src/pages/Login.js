@@ -15,18 +15,9 @@ function Login({ onLogin }) {
     try {
       console.log("Tentando login com:", { email, apiUrl: process.env.REACT_APP_API_URL });
       
+      // ✅ ROTA CORRETA - usando /login com parâmetros de query
       const response = await api.post(
-        "/token",
-        new URLSearchParams({
-          username: email,
-          password: password,
-        }),
-        { 
-          headers: { 
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json"
-          } 
-        }
+        `/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
       );
 
       console.log("Resposta do login:", response.data);
@@ -67,7 +58,7 @@ function Login({ onLogin }) {
         />
         <br />
         <button 
-          onClick={handleLogin} 
+          type="submit"
           disabled={loading}
           style={{ width: "100%", padding: "10px", margin: "10px 0" }}
         >
