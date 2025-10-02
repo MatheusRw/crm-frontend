@@ -14,11 +14,8 @@ FROM nginx:alpine
 # Copiar os arquivos de build para o nginx
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Configuração para SPA (React Router) - CORREÇÃO AQUI
+# Configuração para SPA (React Router)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Garantir que a pasta de configuração existe
-RUN mkdir -p /etc/nginx/conf.d/
 
 EXPOSE 80
 

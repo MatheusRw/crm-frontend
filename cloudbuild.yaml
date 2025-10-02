@@ -16,16 +16,12 @@ steps:
     - '--image'
     - 'gcr.io/$PROJECT_ID/crm-frontend'
     - '--region'
-    - 'southamerica-east1'  # MESMA REGIÃO DO BACKEND
+    - 'southamerica-east1'
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated'
     - '--set-env-vars'
-    - 'REACT_APP_API_URL=$_REACT_APP_API_URL'
-
-# Variáveis de substituição
-substitutions:
-  _REACT_APP_API_URL: "https://crm-backend-828317128646.southamerica-east1.run.app"
+    - 'REACT_APP_API_URL=https://crm-backend-828317128646.southamerica-east1.run.app'
 
 images:
   - 'gcr.io/$PROJECT_ID/crm-frontend'
